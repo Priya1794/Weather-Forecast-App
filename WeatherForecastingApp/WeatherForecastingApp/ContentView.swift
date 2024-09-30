@@ -9,25 +9,25 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-   
-        @State private var city: String = ""
-        
-        var body: some View {
-            NavigationView {
-                VStack {
-                    TextField("Enter city name", text: $city)
-                        .padding()
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    Button("Get Weather") {
-                    }
-                    .padding()
-                    
+    @State private var selectedTab = 0
+
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            WeatherView()
+                .tabItem {
+                    Label("Current Weather", systemImage: "cloud.sun.fill")
                 }
-                .navigationTitle("Weather App")
-            }
+                .tag(0)
+
+            ForecastView()
+                .tabItem {
+                    Label("5-Day Forecast", systemImage: "calendar")
+                }
+                .tag(1)
         }
     }
+}
+
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)

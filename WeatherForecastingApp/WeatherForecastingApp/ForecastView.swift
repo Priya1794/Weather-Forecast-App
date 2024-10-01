@@ -5,35 +5,68 @@ struct ForecastView: View {
     @State private var city: String = ""
     
     var body: some View {
-        VStack {
-            TextField("Enter city name", text: $city)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+        ZStack {
+            // Background gradient
+            LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
             
-            Button("Get Forecast") {
-                //                forecastViewModel.fetchForecast(for: city)
+            VStack {
+                HStack {
+                    Text("This Week")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .center) // Center the title
+                    
+                }
+                
+                // Forecast list
+                if let forecast = weatherViewModel.weather?.forecast?.forecastday, !forecast.isEmpty {
+                    List(forecast, id: \.date) { forecastDay in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(forecastDay.date)
+                                    .bold()
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text("Max Temp:\( String(format:"%.f", forecastDay.day.maxTempC))°C")
+                                
+                                    .foregroundColor(.white)
+                                    .font(.subheadline)
+                                Text("Min Temp:\( String(format:"%.f", forecastDay.day.minTempC))°C")
+                                    .font(.subheadline)
+                                    .foregroundColor(.white)
+                                Text("\(forecastDay.day.condition.text)")
+                                    .foregroundColor(.white).font(.subheadline)
+                            }
+                            Spacer()
+                            AsyncImage(url: URL(string: "https:\(forecastDay.day.condition.icon)")) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Color.clear
+                            }
+                            .frame(width: 60, height: 60)
+                            .clipShape(.rect(cornerRadius: 10))
+                        }
+                        .padding()
+                        .background(Color.black.opacity(0.2))
+                        .cornerRadius(10)
+                    }
+                } else {
+                    Spacer()
+                    Text("No Forecast yet")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    
+                    Text("Please enter city to check next week forecast")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                    
+                }
+                Spacer()
             }
             .padding()
-            
-            // Check if forecast data exists and display it
-            if let forecast = weatherViewModel.weather?.forecast?.forecastday, !forecast.isEmpty {
-                List(forecast, id: \.date) { forecastDay in
-                    VStack(alignment: .leading) {
-                        Text(forecastDay.date)
-                            .font(.headline)
-                        
-                        // Accessing the day's weather information
-                        Text("Max Temp: \(forecastDay.day.maxTempC)°C")
-                        Text("Min Temp: \(forecastDay.day.minTempC)°C")
-                        Text("Condition: \(forecastDay.day.condition.text)")
-                    }
-                }
-            } else if let errorMessage = weatherViewModel.errorMessage {
-                Text("Error: \(errorMessage)")
-                    .foregroundColor(.red)
-            }
-            
         }
-        .padding()
     }
 }

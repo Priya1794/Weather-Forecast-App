@@ -24,6 +24,7 @@ struct WeatherView: View {
                     Button(action: {
                         if city.isEmpty {
                             showAlert = true
+                            weatherViewModel.errorMessage = nil
                         } else {
                             weatherViewModel.weather = nil
                             showAlert = false

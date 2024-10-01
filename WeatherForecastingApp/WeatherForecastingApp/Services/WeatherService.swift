@@ -1,14 +1,16 @@
 import Foundation
 
+
+
 class WeatherService {
+    
     static let shared = WeatherService()
     private let apiKey = "bbcc40f2edec42d18b793404243009"
     private let forecastDays = 5
     
     private init() {}
-    
-    // Fetch 5-day weather forecast for a city
-    func fetchForecast(for city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
+
+    func fetchWeatherFromAPI(for city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         let urlString = "http://api.weatherapi.com/v1/forecast.json?key=\(apiKey)&q=\(city)&days=\(forecastDays)"
         
         guard let url = URL(string: urlString) else {
@@ -30,9 +32,11 @@ class WeatherService {
             do {
                 let decodedForecast = try JSONDecoder().decode(WeatherResponse.self, from: data)
                 completion(.success(decodedForecast))
+               
             } catch {
                 completion(.failure(error))
             }
         }.resume()
     }
+
 }

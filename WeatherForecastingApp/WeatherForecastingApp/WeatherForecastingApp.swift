@@ -11,13 +11,12 @@ import SwiftUI
 @main
 struct WeatherForecastingApp: App {
     let persistenceController = PersistenceController.shared
-    @StateObject private var weatherViewModel = WeatherViewModel()
 
     var body: some Scene {
-        WindowGroup {
-          
-            ContentView().environmentObject(weatherViewModel)
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-        }
-    }
+           WindowGroup {
+               ContentView()
+                   .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                   .environmentObject(WeatherViewModel(coreDataService: CoreDataService())) // Inject CoreDataService
+           }
+       }
 }

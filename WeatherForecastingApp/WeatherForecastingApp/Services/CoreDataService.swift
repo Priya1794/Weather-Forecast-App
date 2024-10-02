@@ -117,9 +117,9 @@ class CoreDataService: CoreDataServiceProtocol {
 
         if let forecastEntity = weatherCache.forecast,
            let forecastDaysEntities = forecastEntity.forecastDays?.allObjects as? [ForecastDayModel] {
-            // Sort forecastDaysEntities based on a date property (replace 'date' with the actual property name)
+            
             let sortedForecastDaysEntities = forecastDaysEntities.sorted {
-                // Assuming ForecastDayModel has a date property of type Date
+               
                 guard let firstDate = $0.date, let secondDate = $1.date else { return false }
                 return firstDate < secondDate
             }

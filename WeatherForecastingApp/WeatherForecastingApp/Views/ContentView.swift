@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
-
-import SwiftUI
 
 // MARK: - ContentView
 /// The main view of the Weather Forecasting application.

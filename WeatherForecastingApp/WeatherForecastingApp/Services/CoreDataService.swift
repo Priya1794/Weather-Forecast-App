@@ -52,7 +52,7 @@ class CoreDataService: CoreDataServiceProtocol {
     private func fetchCoreDataWeather(for city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         // First, attempt to fetch from Core Data
         let fetchRequest: NSFetchRequest<WeatherModel> = WeatherModel.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "city == %@", city)
+        fetchRequest.predicate = NSPredicate(format: "city ==[c] %@", city) 
         
         do {
             let results = try context.fetch(fetchRequest)
@@ -114,12 +114,21 @@ class CoreDataService: CoreDataServiceProtocol {
     /// - Returns: The corresponding Forecast model with a list of forecast days.
     private func mapForecast(from weatherCache: WeatherModel) -> Forecast {
         var forecastDays: [ForecastDay] = []
-        
+
         if let forecastEntity = weatherCache.forecast,
            let forecastDaysEntities = forecastEntity.forecastDays?.allObjects as? [ForecastDayModel] {
-            forecastDays = forecastDaysEntities.map { mapForecastDay(from: $0) }
+            
+            let sortedForecastDaysEntities = forecastDaysEntities.sorted {
+               
+                guard let firstDate = $0.date, let secondDate = $1.date else { return false }
+                return firstDate < secondDate
+            }
+            
+            // Map the sorted entities to ForecastDay
+            forecastDays = sortedForecastDaysEntities.map { mapForecastDay(from: $0) }
+            
         }
-        
+
         return Forecast(forecastday: forecastDays)
     }
     
@@ -170,9 +179,7 @@ class CoreDataService: CoreDataServiceProtocol {
         weatherEntity.location = locationEntity
         weatherEntity.forecast = foreCastEntity
         weatherEntity.city = city
-        
-        print("WeatherEntity: \(weatherEntity), CurrentWeatherEntity: \(currentWeatherEntity), LocationEntity: \(locationEntity), ForecastEntity: \(forecastEntity)")
-        
+    
         saveContext()
     }
     

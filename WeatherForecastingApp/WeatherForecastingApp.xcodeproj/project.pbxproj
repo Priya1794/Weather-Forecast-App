@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0723A1A12CAC4334009AB0B5 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0723A1A02CAC4334009AB0B5 /* CoreDataService.swift */; };
 		074A886E2CAAF15B005984D4 /* WeatherForecastingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075F2DEB2CAAD4C100BF1E4A /* WeatherForecastingApp.swift */; };
 		075AEAEB2CAAF933001C178D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075AEAEA2CAAF933001C178D /* ContentView.swift */; };
 		075AEAED2CAAF94B001C178D /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075AEAEC2CAAF94B001C178D /* WeatherView.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0723A1A02CAC4334009AB0B5 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		075AEAEA2CAAF933001C178D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		075AEAEC2CAAF94B001C178D /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		075AEAEE2CAAF94F001C178D /* ForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				075AEAF42CAAF9C4001C178D /* WeatherService.swift */,
+				0723A1A02CAC4334009AB0B5 /* CoreDataService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 			files = (
 				075AEAF32CAAF9B9001C178D /* Weather.swift in Sources */,
 				075AEAF52CAAF9C4001C178D /* WeatherService.swift in Sources */,
+				0723A1A12CAC4334009AB0B5 /* CoreDataService.swift in Sources */,
 				075AEAED2CAAF94B001C178D /* WeatherView.swift in Sources */,
 				074A886E2CAAF15B005984D4 /* WeatherForecastingApp.swift in Sources */,
 				075F2DF82CAAD4C800BF1E4A /* WeatherForecastingApp.xcdatamodeld in Sources */,

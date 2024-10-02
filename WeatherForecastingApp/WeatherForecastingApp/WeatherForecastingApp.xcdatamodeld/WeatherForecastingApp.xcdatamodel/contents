@@ -1,9 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22222" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="AstroModel" representedClassName="AstroModel" syncable="YES" codeGenerationType="class">
+        <attribute name="sunrise" optional="YES" attributeType="String"/>
+        <attribute name="sunset" optional="YES" attributeType="String"/>
+        <relationship name="forecastDay" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastDayModel" inverseName="astro" inverseEntity="ForecastDayModel"/>
+    </entity>
+    <entity name="CurrentWeatherModel" representedClassName="CurrentWeatherModel" syncable="YES" codeGenerationType="class">
+        <attribute name="humidity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isDay" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tempF" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windKph" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="windMph" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="condition" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherConditionModel" inverseName="currentWeather" inverseEntity="WeatherConditionModel"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherModel" inverseName="current" inverseEntity="WeatherModel"/>
+    </entity>
+    <entity name="DayModel" representedClassName="DayModel" syncable="YES" codeGenerationType="class">
+        <attribute name="avgTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="maxTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="maxWindKph" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="maxWindMph" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minTempC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="condition" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherConditionModel" inverseName="day" inverseEntity="WeatherConditionModel"/>
+        <relationship name="forecastDay" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastDayModel" inverseName="day" inverseEntity="ForecastDayModel"/>
+    </entity>
+    <entity name="ForecastDayModel" representedClassName="ForecastDayModel" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <relationship name="astro" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AstroModel" inverseName="forecastDay" inverseEntity="AstroModel"/>
+        <relationship name="day" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DayModel" inverseName="forecastDay" inverseEntity="DayModel"/>
+        <relationship name="forecast" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ForecastModel" inverseName="forecastDays" inverseEntity="ForecastModel"/>
+    </entity>
+    <entity name="ForecastModel" representedClassName="ForecastModel" syncable="YES" codeGenerationType="class">
+        <relationship name="forecastDays" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ForecastDayModel" inverseName="forecast" inverseEntity="ForecastDayModel"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherModel" inverseName="forecast" inverseEntity="WeatherModel"/>
+    </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
-    <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-    </elements>
+    <entity name="LocationModel" representedClassName="LocationModel" syncable="YES" codeGenerationType="class">
+        <attribute name="country" optional="YES" attributeType="String"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="long" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="region" optional="YES" attributeType="String"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherModel" inverseName="location" inverseEntity="WeatherModel"/>
+    </entity>
+    <entity name="WeatherConditionModel" representedClassName="WeatherConditionModel" syncable="YES" codeGenerationType="class">
+        <attribute name="code" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="currentWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentWeatherModel" inverseName="condition" inverseEntity="CurrentWeatherModel"/>
+        <relationship name="day" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DayModel" inverseName="condition" inverseEntity="DayModel"/>
+    </entity>
+    <entity name="WeatherModel" representedClassName="WeatherModel" syncable="YES" codeGenerationType="class">
+        <attribute name="city" optional="YES" attributeType="String"/>
+        <relationship name="current" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentWeatherModel" inverseName="weather" inverseEntity="CurrentWeatherModel"/>
+        <relationship name="forecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastModel" inverseName="weather" inverseEntity="ForecastModel"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocationModel" inverseName="weather" inverseEntity="LocationModel"/>
+    </entity>
 </model>

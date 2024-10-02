@@ -10,9 +10,14 @@ import CoreData
 
 import SwiftUI
 
+// MARK: - ContentView
+/// The main view of the Weather Forecasting application.
 struct ContentView: View {
+    
+    // MARK: Properties
     @State private var selectedTab = 0
     
+    // MARK: Initializer
     init() {
         // Change the appearance of the tab bar background and the items
         UITabBar.appearance().backgroundColor = UIColor.white
@@ -20,6 +25,7 @@ struct ContentView: View {
         UITabBar.appearance().unselectedItemTintColor = UIColor.gray
     }
     
+    // MARK: Body
     var body: some View {
         TabView(selection: $selectedTab) {
             WeatherView()
@@ -38,8 +44,8 @@ struct ContentView: View {
 }
 
 
-
-
+// MARK: - Preview
+/// A preview provider for the ContentView, allowing live previews in Xcode.
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

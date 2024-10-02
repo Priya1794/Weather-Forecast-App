@@ -1,6 +1,7 @@
 import Foundation
 
 // MARK: - WeatherResponse
+/// A struct representing the weather response from the API.
 struct WeatherResponse: Codable {
     let location: Location
     let current: CurrentWeather
@@ -8,6 +9,7 @@ struct WeatherResponse: Codable {
 }
 
 // MARK: - Location
+/// A struct representing the location details.
 struct Location: Codable {
     let name: String
     let region: String
@@ -17,6 +19,7 @@ struct Location: Codable {
 }
 
 // MARK: - CurrentWeather
+/// A struct representing the current weather conditions.
 struct CurrentWeather: Codable {
     let tempC: Double  // Temperature in Celsius
     let tempF: Double  // Temperature in Fahrenheit
@@ -26,7 +29,8 @@ struct CurrentWeather: Codable {
     let windKph: Double
     let humidity: Int
     
-    // Coding keys to map JSON keys to properties
+    // MARK: CodingKeys
+    /// Coding keys to map JSON keys to struct properties.
     enum CodingKeys: String, CodingKey {
         case tempC = "temp_c"
         case tempF = "temp_f"
@@ -39,6 +43,7 @@ struct CurrentWeather: Codable {
 }
 
 // MARK: - WeatherCondition
+/// A struct representing the weather condition details.
 struct WeatherCondition: Codable {
     let text: String
     let icon: String
@@ -46,11 +51,13 @@ struct WeatherCondition: Codable {
 }
 
 // MARK: - Forecast
+/// A struct representing the forecast data.
 struct Forecast: Codable {
     let forecastday: [ForecastDay]
 }
 
 // MARK: - ForecastDay
+/// A struct representing a single day's forecast.
 struct ForecastDay: Codable {
     let date: String
     let day: Day
@@ -58,6 +65,7 @@ struct ForecastDay: Codable {
 }
 
 // MARK: - Day
+/// A struct representing the weather data for a specific day.
 struct Day: Codable {
     let maxTempC: Double
     let minTempC: Double
@@ -66,6 +74,8 @@ struct Day: Codable {
     let maxWindKph: Double
     let condition: WeatherCondition
 
+    // MARK: CodingKeys
+    /// Coding keys to map JSON keys to struct properties.
     enum CodingKeys: String, CodingKey {
         case maxTempC = "maxtemp_c"
         case minTempC = "mintemp_c"
@@ -77,6 +87,7 @@ struct Day: Codable {
 }
 
 // MARK: - Astro
+/// A struct representing astronomical data for the day.
 struct Astro: Codable {
     let sunrise: String
     let sunset: String

@@ -1,5 +1,6 @@
 import SwiftUI
 
+// MARK: - Main Weather View
 struct WeatherView: View {
     @EnvironmentObject var weatherViewModel: WeatherViewModel
     @State private var city: String = ""
@@ -8,8 +9,7 @@ struct WeatherView: View {
     var body: some View {
         ZStack {
             // Background gradient
-            LinearGradient(gradient: Gradient(colors: [.orange, .purple]), startPoint: .top, endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
+            BackgroundLinearGradient()
             
             VStack(spacing: 20) {
                 // Get weather button
@@ -47,72 +47,7 @@ struct WeatherView: View {
                 
                 // Show weather information if available
                 if let weather = weatherViewModel.weather {
-                    // Display weather information
-                    HStack {
-                        // City selection and icon
-                        VStack(alignment: .leading) {
-                            Text(weather.location.name + ", " + weather.location.region)
-                                .font(.title)
-                                .bold()
-                                .foregroundColor(.white)
-                            Text(weather.current.condition.text)
-                                .font(.title3)
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                        AsyncImage(url: URL(string: "https:\(weather.current.condition.icon)")) { image in
-                            image.resizable()
-                        } placeholder: {
-                            Color.clear
-                        }
-                        .frame(width: 128, height: 128)
-                        .clipShape(RoundedRectangle(cornerRadius: 25))
-                    }
-                    .padding()
-                    
-                    Spacer()
-                    VStack {
-                        Text("\(String(format: "%.f", weather.current.tempC))°C")
-                            .font(.system(size: 80))
-                            .bold()
-                            .foregroundColor(.white)
-                        
-                        HStack {
-                            VStack {
-                                Text("Humidity")
-                                    .foregroundColor(.white)
-                                Text("\(String(describing: weather.current.humidity)) %")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                            }
-                            Spacer()
-                            VStack {
-                                Text("Wind Speed")
-                                    .foregroundColor(.white)
-                                Text("\(String(describing: weather.current.windKph)) kph")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        .padding(.horizontal)
-                        
-                        HStack {
-                            VStack {
-                                Text("Sunrise")
-                                    .foregroundColor(.white)
-                                Text(weather.forecast?.forecastday.first?.astro.sunrise ?? "")
-                                    .foregroundColor(.yellow)
-                            }
-                            Spacer()
-                            VStack {
-                                Text("Sunset")
-                                    .foregroundColor(.white)
-                                Text(weather.forecast?.forecastday.first?.astro.sunset ?? "")
-                                    .foregroundColor(.yellow)
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
+                    WeatherDisplay(weather: weather)
                 } else if weatherViewModel.errorMessage != nil{
                     // Clear previous weather data and show error
                     Text("Something went wrong, Please try again")
@@ -142,6 +77,111 @@ struct WeatherView: View {
                     )
                 }
             }
+        }
+    }
+}
+
+// MARK: - Subviews
+
+/// A view that displays a gradient background.
+struct BackgroundLinearGradient: View {
+    var body: some View {
+        LinearGradient(gradient: Gradient(colors: [.orange, .purple]), startPoint: .top, endPoint: .bottom)
+            .edgesIgnoringSafeArea(.all)
+    }
+}
+
+
+/// A view that displays weather information.
+struct WeatherDisplay: View {
+    var weather: WeatherResponse
+
+    var body: some View {
+        VStack {
+            CityInfoView(location: weather.location, condition: weather.current.condition)
+            TemperatureView(temperature: weather.current.tempC, humidity: weather.current.humidity, windSpeed: weather.current.windKph)
+            SunInfoView(astro: weather.forecast?.forecastday.first?.astro)
+        }
+    }
+}
+
+/// A view that displays information about the city.
+struct CityInfoView: View {
+    var location: Location
+    var condition: WeatherCondition
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("\(location.name), \(location.region)")
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(.white)
+                Text(condition.text)
+                    .font(.title3)
+                    .foregroundColor(.white)
+            }
+            Spacer()
+            AsyncImage(url: URL(string: "https:\(condition.icon)")) { image in
+                image.resizable()
+            } placeholder: {
+                Color.clear
+            }
+            .frame(width: 128, height: 128)
+            .clipShape(RoundedRectangle(cornerRadius: 25))
+        }
+        .padding()
+    }
+}
+
+/// A view that displays temperature and related information.
+struct TemperatureView: View {
+    var temperature: Double
+    var humidity: Int
+    var windSpeed: Double
+
+    var body: some View {
+        VStack {
+            Text("\(String(format: "%.f", temperature))°C")
+                .font(.system(size: 80))
+                .bold()
+                .foregroundColor(.white)
+            HStack {
+                InfoLabel(title: "Humidity", value: "\(humidity) %")
+                Spacer()
+                InfoLabel(title: "Wind Speed", value: "\(windSpeed) kph")
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+/// A view that displays sunrise and sunset times.
+struct SunInfoView: View {
+    var astro: Astro?
+
+    var body: some View {
+        HStack {
+            InfoLabel(title: "Sunrise", value: astro?.sunrise ?? "")
+            Spacer()
+            InfoLabel(title: "Sunset", value: astro?.sunset ?? "")
+        }
+        .padding(.horizontal)
+    }
+}
+
+/// A view that displays a title and a value.
+struct InfoLabel: View {
+    var title: String
+    var value: String
+
+    var body: some View {
+        VStack {
+            Text(title)
+                .foregroundColor(.white)
+            Text(value)
+                .font(.title)
+                .foregroundColor(.white)
         }
     }
 }

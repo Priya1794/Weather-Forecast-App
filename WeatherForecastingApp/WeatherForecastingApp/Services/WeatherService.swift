@@ -32,7 +32,7 @@ class WeatherService:WeatherServiceProtocol {
     ///   - completion: A closure that takes a `Result` with either a `WeatherResponse` or an `Error`.
     func fetchWeatherFromAPI(for city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         // Construct the API request URL with the city name and forecast days.
-        let urlString = "http://api.weatherapi.com/v1/forecast.json?key=\(apiKey)&q=\(city)&days=\(forecastDays)"
+        let urlString = "\(ServiceConstants.WEATHER_API)?key=\(apiKey)&q=\(city)&days=\(forecastDays)"
         
         guard let url = URL(string: urlString) else {
             completion(.failure(URLError(.badURL)))

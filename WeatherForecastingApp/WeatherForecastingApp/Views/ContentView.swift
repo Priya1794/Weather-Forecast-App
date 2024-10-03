@@ -27,13 +27,13 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             WeatherView()
                 .tabItem {
-                    Label("Current Weather", systemImage: "cloud.sun.fill")
+                    Label(StringConstants.currentWeather, systemImage: "cloud.sun.fill")
                 }
                 .tag(0)
             
             ForecastView()
                 .tabItem {
-                    Label("5-Day Forecast", systemImage: "calendar")
+                    Label(StringConstants.fiveDayForcast, systemImage: "calendar")
                 }
                 .tag(1)
         }

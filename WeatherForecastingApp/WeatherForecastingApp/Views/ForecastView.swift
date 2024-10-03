@@ -11,7 +11,7 @@ struct ForecastView: View {
             BackgroundGradient()
             
             VStack {
-                HeaderView(title: "This Week")
+                HeaderView(title: TextMesages.thisWeek.description)
                 
                 // Forecast list
                 if let forecast = weatherViewModel.weather?.forecast?.forecastday, !forecast.isEmpty {
@@ -104,11 +104,11 @@ struct ForecastRow: View {
 struct NoForecastView: View {
     var body: some View {
         Spacer()
-        Text("No Forecast yet")
+        Text(TextMesages.noForecastYet.description)
             .font(.headline)
             .foregroundColor(.white)
         
-        Text("Please enter city to check this week's forecast")
+        Text(TextMesages.enterCityToCheckForecast.description)
             .font(.subheadline)
             .foregroundColor(.white)
     }

@@ -175,7 +175,7 @@ class CoreDataService: CoreDataServiceProtocol {
         let forecastEntity = createForecastEntity(from: weatherResponse.forecast)
         
         guard let foreCastEntity = forecastEntity else{
-            print("Error in saving core data weather data")
+            print(AlertMessages.errorSavingCoreData.description)
             return
         }
         

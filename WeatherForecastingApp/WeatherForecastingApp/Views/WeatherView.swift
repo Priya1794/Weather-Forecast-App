@@ -13,7 +13,7 @@ struct WeatherView: View {
             
             VStack(spacing: 20) {
                 VStack {
-                    TextField("Enter city name", text: $city)
+                    TextField(StringConstants.enterCityName, text: $city)
                         .padding(.all, 7) // Horizontal padding inside the TextField
                         .frame(height: 45) // Set the height of the TextField
                         .background(Color(.systemGray6)) // Background color
@@ -30,7 +30,7 @@ struct WeatherView: View {
                             weatherViewModel.fetchWeather(for: city)
                         }
                     }) {
-                        Text("Check Weather")
+                        Text(StringConstants.checkWeather)
                             .bold()
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -47,7 +47,7 @@ struct WeatherView: View {
                     WeatherDisplay(weather: weather)
                 } else if weatherViewModel.errorMessage != nil{
                     // Clear previous weather data and show error
-                    Text("Something went wrong, Please try again")
+                    Text(AlertMessages.defaultAlert.description)
                         .foregroundColor(.red)
                         .padding()
                         .onAppear {
@@ -61,15 +61,15 @@ struct WeatherView: View {
             }.alert(isPresented: $showAlert) {
                 if let errorMessage = weatherViewModel.errorMessage {
                     return Alert(
-                        title: Text("Error"),
+                        title: Text(StringConstants.error),
                         message: Text(errorMessage),
-                        dismissButton: .default(Text("OK"))
+                        dismissButton: .default(Text(StringConstants.ok))
                     )
                 } else{
                     return Alert(
-                        title: Text("Error"),
-                        message: Text("Please enter a city to check the weather."),
-                        dismissButton: .default(Text("OK"))
+                        title: Text(StringConstants.error),
+                        message: Text(AlertMessages.enterCityToCheckWeather.description),
+                        dismissButton: .default(Text(StringConstants.ok))
                         
                     )
                 }
@@ -144,9 +144,9 @@ struct TemperatureView: View {
                 .bold()
                 .foregroundColor(.white)
             HStack {
-                InfoLabel(title: "Humidity", value: "\(humidity) %")
+                InfoLabel(title: StringConstants.humidity, value: "\(humidity) %")
                 Spacer()
-                InfoLabel(title: "Wind Speed(kph)", value: "\(windSpeed) kph")
+                InfoLabel(title: StringConstants.windSpeed, value: "\(windSpeed) kph")
             }
             .padding(.horizontal)
         }
@@ -159,9 +159,9 @@ struct SunInfoView: View {
 
     var body: some View {
         HStack {
-            InfoLabel(title: "Sunrise", value: astro?.sunrise ?? "")
+            InfoLabel(title: StringConstants.sunrise, value: astro?.sunrise ?? "")
             Spacer()
-            InfoLabel(title: "Sunset", value: astro?.sunset ?? "")
+            InfoLabel(title: StringConstants.sunset, value: astro?.sunset ?? "")
         }
         .padding(.horizontal)
     }

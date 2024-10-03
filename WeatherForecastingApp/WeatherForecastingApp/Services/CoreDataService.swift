@@ -22,9 +22,13 @@ protocol CoreDataServiceProtocol {
 class CoreDataService: CoreDataServiceProtocol {
     
     // MARK: - Properties
-    
     /// The Core Data context from the shared Persistence Controller.
-    private let context = PersistenceController.shared.container.viewContext
+    private let context: NSManagedObjectContext
+    
+    // MARK: - Initializers
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+        self.context = context
+    }
     
     // MARK: - Fetch Weather Methods
     
@@ -58,6 +62,7 @@ class CoreDataService: CoreDataServiceProtocol {
             let results = try context.fetch(fetchRequest)
             
             guard let weatherCache = results.first else{
+                completion(.failure(NSError(domain: "", code: 404, userInfo: nil)))
                 return
             }
             

@@ -13,15 +13,18 @@ class WeatherViewModel: ObservableObject {
     
     // MARK: - CoreData Service
     
-    /// A reference to the CoreDataService protocol for accessing and saving weather data in Core Data.
-    private let coreDataService: CoreDataServiceProtocol
+    /// A reference to the CoreDataService/WeatherServiceProtocol protocol for accessing and saving weather data in Core Data.
+    var coreDataService: CoreDataServiceProtocol
+    var weatherService: WeatherServiceProtocol
     
     // MARK: - Initializer
     
     /// Initializes the ViewModel with a CoreData service.
     /// - Parameter coreDataService: A protocol for fetching/saving weather data in Core Data, defaults to CoreDataService.
-    init(coreDataService: CoreDataServiceProtocol = CoreDataService()) {
+    ///             weatherService:A protocol for fetching/saving weather data from API
+    init(coreDataService: CoreDataServiceProtocol, weatherService: WeatherServiceProtocol) {
         self.coreDataService = coreDataService
+        self.weatherService = weatherService
     }
     
     // MARK: - Weather Fetching Methods
@@ -35,18 +38,14 @@ class WeatherViewModel: ObservableObject {
             switch result {
             case .success(let cachedWeather):
                 // Successfully fetched from Core Data, update the weather and reset the error
-                self?.weather = cachedWeather
-                self?.errorMessage = nil
+                DispatchQueue.main.async {
+                    self?.weather = cachedWeather
+                    self?.errorMessage = nil
+                }
             case .failure:
-                // Failed to fetch from Core Data, set the error message
-                self?.weather = nil
-                self?.errorMessage = "Failed to fetch weather"
+                // Failed to fetch from Core Data, proceed to fetch from API
+                self?.fetchWeatherIfNotFoundFromCoreData(for: city)
             }
-        }
-        
-        // If no weather found in Core Data, fetch from API
-        if (self.weather == nil){
-            self.fetchWeatherIfNotFoundFromCoreData(for: city)
         }
     }
     
@@ -55,28 +54,30 @@ class WeatherViewModel: ObservableObject {
     /// - Parameter city: The name of the city for which to fetch the weather.
     func fetchWeatherIfNotFoundFromCoreData(for city: String){
         
-        WeatherService.shared.fetchWeatherFromAPI(for: city) { result in
+        self.weatherService.fetchWeatherFromAPI(for: city) { result in
             switch result {
             case .success(let weatherResponse):
                 // Successfully fetched from API, update the weather and save it to Core Data
+                DispatchQueue.main.async {
                 self.weather = weatherResponse
                 if let weather = self.weather{
-                   
-                    if self.coreDataService.validateWeatherResponse(weather) {
-                        self.weather = weatherResponse
-                        self.errorMessage = nil
-                        self.coreDataService.saveWeather(weather, for: city)
-                    } else {
-                        self.weather = nil
-                        self.errorMessage = "Failed to cache weather"
-                        
+                        if self.coreDataService.validateWeatherResponse(weather) {
+                            self.weather = weatherResponse
+                            self.errorMessage = nil
+                            self.coreDataService.saveWeather(weather, for: city)
+                        } else {
+                            self.weather = nil
+                            self.errorMessage = "Invalid weather response: Failed to cache weather"
+                        }
                     }
                 }
                
             case .failure(let error):
                 // Failed to fetch from API, set the error message with details
-                self.weather = nil
-                self.errorMessage = "Failed to fetch weather: \(error.localizedDescription)"
+                DispatchQueue.main.async {
+                    self.weather = nil
+                    self.errorMessage = "Failed to fetch weather: \(error.localizedDescription)"
+                }
             }
         }
     }

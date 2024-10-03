@@ -1,7 +1,11 @@
 import Foundation
 
+protocol WeatherServiceProtocol {
+    func fetchWeatherFromAPI(for city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void)
+}
+
 /// A service class responsible for fetching weather data from the API.
-class WeatherService {
+class WeatherService:WeatherServiceProtocol {
     
     // MARK: - Singleton Instance
     

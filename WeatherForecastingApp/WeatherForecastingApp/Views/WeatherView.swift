@@ -12,7 +12,6 @@ struct WeatherView: View {
             BackgroundLinearGradient()
             
             VStack(spacing: 20) {
-                // Get weather button
                 VStack {
                     TextField("Enter city name", text: $city)
                         .padding(.all, 7) // Horizontal padding inside the TextField
@@ -29,8 +28,6 @@ struct WeatherView: View {
                             weatherViewModel.weather = nil
                             showAlert = false
                             weatherViewModel.fetchWeather(for: city)
-                            
-                            
                         }
                     }) {
                         Text("Check Weather")
@@ -114,7 +111,7 @@ struct CityInfoView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("\(location.name), \(location.region)")
-                    .font(.title)
+                    .font(.title2)
                     .bold()
                     .foregroundColor(.white)
                 Text(condition.text)
@@ -149,7 +146,7 @@ struct TemperatureView: View {
             HStack {
                 InfoLabel(title: "Humidity", value: "\(humidity) %")
                 Spacer()
-                InfoLabel(title: "Wind Speed", value: "\(windSpeed) kph")
+                InfoLabel(title: "Wind Speed(kph)", value: "\(windSpeed) kph")
             }
             .padding(.horizontal)
         }
@@ -176,7 +173,7 @@ struct InfoLabel: View {
     var value: String
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(title)
                 .foregroundColor(.white)
             Text(value)

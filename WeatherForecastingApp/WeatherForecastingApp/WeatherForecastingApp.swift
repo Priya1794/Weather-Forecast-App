@@ -16,7 +16,7 @@ struct WeatherForecastingApp: App {
            WindowGroup {
                ContentView()
                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                   .environmentObject(WeatherViewModel(coreDataService: CoreDataService())) // Inject CoreDataService
+                   .environmentObject(WeatherViewModel(coreDataService: CoreDataService(), weatherService: WeatherService.shared)) // Inject CoreDataService
            }
        }
 }

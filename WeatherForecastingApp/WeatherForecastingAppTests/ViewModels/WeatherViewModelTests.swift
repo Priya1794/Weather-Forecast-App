@@ -138,7 +138,7 @@ final class WeatherViewModelTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             // Ensure no weather data is set and the correct error message is generated
             XCTAssertNil(self.viewModel.weather)
-            XCTAssertEqual(self.viewModel.errorMessage, "Failed to fetch weather: The operation couldn’t be completed. ( error 500.)")
+            XCTAssertEqual(self.viewModel.errorMessage, "Failed to fetch weather:  The operation couldn’t be completed. ( error 500.)")
             
             // Fulfill the expectation
             expectation.fulfill()

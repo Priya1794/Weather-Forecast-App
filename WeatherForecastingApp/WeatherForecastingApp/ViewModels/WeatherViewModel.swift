@@ -67,7 +67,7 @@ class WeatherViewModel: ObservableObject {
                             self.coreDataService.saveWeather(weather, for: city)
                         } else {
                             self.weather = nil
-                            self.errorMessage = "Invalid weather response: Failed to cache weather"
+                            self.errorMessage = AlertMessages.invalidWeatherResponse.description
                         }
                     }
                 }
@@ -76,7 +76,7 @@ class WeatherViewModel: ObservableObject {
                 // Failed to fetch from API, set the error message with details
                 DispatchQueue.main.async {
                     self.weather = nil
-                    self.errorMessage = "Failed to fetch weather: \(error.localizedDescription)"
+                    self.errorMessage = "\(AlertMessages.failedToFetchWeather.description)  \(error.localizedDescription)"
                 }
             }
         }
